@@ -82,9 +82,14 @@ export class MetadataLoader {
             if (Utils.isInt32(parseInt(stream.avg_frame_rate, 10))) {
               metadata.fps = parseInt(stream.avg_frame_rate, 10) || null;
             }
-            metadata.creationDate =
-              Date.parse(stream.tags.creation_time) ||
-              metadata.creationDate;
+            if (
+              stream.tags !== undefined &&
+              typeof stream.tags.creation_time === 'string'
+            ) {
+              metadata.creationDate =
+                Date.parse(stream.tags.creation_time) ||
+                metadata.creationDate;
+            }
             break;
           }
         }
@@ -139,18 +144,22 @@ export class MetadataLoader {
           if (fs.existsSync(sidecarPath)) {
             const sidecarData = await exifr.sidecar(sidecarPath);
             if (sidecarData !== undefined) {
-              if ((sidecarData as SideCar).dc.subject !== undefined) {
-                if (metadata.keywords === undefined) {
-                  metadata.keywords = [];
-                }
-                for (const kw of (sidecarData as SideCar).dc.subject) {
-                  if (metadata.keywords.indexOf(kw) === -1) {
-                    metadata.keywords.push(kw);
+              if ((sidecarData as SideCar).dc !== undefined) {
+                if ((sidecarData as SideCar).dc.subject !== undefined) {
+                  if (metadata.keywords === undefined) {
+                    metadata.keywords = [];
+                  }
+                  for (const kw of (sidecarData as SideCar).dc.subject) {
+                    if (metadata.keywords.indexOf(kw) === -1) {
+                      metadata.keywords.push(kw);
+                    }
                   }
                 }
               }
-              if ((sidecarData as SideCar).xmp.Rating !== undefined) {
-                metadata.rating = (sidecarData as SideCar).xmp.Rating;
+              if ((sidecarData as SideCar).xmp !== undefined) {
+                if ((sidecarData as SideCar).xmp.Rating !== undefined) {
+                  metadata.rating = (sidecarData as SideCar).xmp.Rating;
+                }
               }
             }
           }
@@ -626,18 +635,22 @@ export class MetadataLoader {
               const sidecarData = await exifr.sidecar(sidecarPath);
 
               if (sidecarData !== undefined) {
-                if ((sidecarData as SideCar).dc.subject !== undefined) {
-                  if (metadata.keywords === undefined) {
-                    metadata.keywords = [];
-                  }
-                  for (const kw of (sidecarData as SideCar).dc.subject) {
-                    if (metadata.keywords.indexOf(kw) === -1) {
-                      metadata.keywords.push(kw);
+                if ((sidecarData as SideCar).dc !== undefined) {
+                  if ((sidecarData as SideCar).dc.subject !== undefined) {
+                    if (metadata.keywords === undefined) {
+                      metadata.keywords = [];
+                    }
+                    for (const kw of (sidecarData as SideCar).dc.subject) {
+                      if (metadata.keywords.indexOf(kw) === -1) {
+                        metadata.keywords.push(kw);
+                      }
                     }
                   }
                 }
-                if ((sidecarData as SideCar).xmp.Rating !== undefined) {
-                  metadata.rating = (sidecarData as SideCar).xmp.Rating;
+                if ((sidecarData as SideCar).xmp !== undefined) {
+                  if ((sidecarData as SideCar).xmp.Rating !== undefined) {
+                    metadata.rating = (sidecarData as SideCar).xmp.Rating;
+                  }
                 }
               }
             }
