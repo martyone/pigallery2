@@ -436,7 +436,7 @@ gulp.task(
     'localize-bundles',
     'build-backend',
     'copy-static',
-    'copy-package',
-    'zip-release'
+    'copy-package' /*,
+    'zip-release'*/
   )
 );
