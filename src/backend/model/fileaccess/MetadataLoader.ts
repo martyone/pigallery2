@@ -166,6 +166,10 @@ export class MetadataLoader {
                   }
                 }
               }
+              if (Object.hasOwn(sidecarData, 'xap')) {
+                (sidecarData as any)['xmp'] = (sidecarData as any)['xap'];
+                delete (sidecarData as any)['xap'];
+              }
               if ((sidecarData as SideCar).xmp !== undefined) {
                 if ((sidecarData as SideCar).xmp.Rating !== undefined) {
                   metadata.rating = (sidecarData as SideCar).xmp.Rating;
@@ -677,6 +681,10 @@ export class MetadataLoader {
                       hasPhotoshopDate = true;
                     }
                   }
+                }
+                if (Object.hasOwn(sidecarData, 'xap')) {
+                  (sidecarData as any)['xmp'] = (sidecarData as any)['xap'];
+                  delete (sidecarData as any)['xap'];
                 }
                 if ((sidecarData as SideCar).xmp !== undefined) {
                   if ((sidecarData as SideCar).xmp.Rating !== undefined) {
