@@ -144,16 +144,7 @@ export class MetadataLoader {
           if (fs.existsSync(sidecarPath)) {
             const sidecarData = await exifr.sidecar(sidecarPath);
             if (sidecarData !== undefined) {
-              if ((sidecarData as SideCar).dc !== undefined) {
-                if ((sidecarData as SideCar).dc.subject !== undefined) {
-                  if (metadata.keywords === undefined) {
-                    metadata.keywords = [];
-                  }
-                  for (const kw of (sidecarData as SideCar).dc.subject) {
-                    if (metadata.keywords.indexOf(kw) === -1) {
-                      metadata.keywords.push(kw);
-                    }
-                  }
+              a   }
                 }
               }
               let hasPhotoshopDate = false;
@@ -658,17 +649,18 @@ export class MetadataLoader {
           for (const sidecarPath of sidecarPaths) {
             if (fs.existsSync(sidecarPath)) {
               const sidecarData = await exifr.sidecar(sidecarPath);
-
               if (sidecarData !== undefined) {
-                if ((sidecarData as SideCar).dc !== undefined) {
-                  if ((sidecarData as SideCar).dc.subject !== undefined) {
-                    if (metadata.keywords === undefined) {
-                      metadata.keywords = [];
-                    }
-                    for (const kw of (sidecarData as SideCar).dc.subject) {
-                      if (metadata.keywords.indexOf(kw) === -1) {
-                        metadata.keywords.push(kw);
-                      }
+                if ((sidecarData as SideCar).dc.subject !== undefined) {
+                  if (metadata.keywords === undefined) {
+                    metadata.keywords = [];
+                  }
+                  let keywords = (sidecarData as SideCar).dc.subject || [];
+                  if (typeof keywords === 'string') {
+                    keywords = [keywords];
+                  }
+                  for (const kw of keywords) {
+                    if (metadata.keywords.indexOf(kw) === -1) {
+                      metadata.keywords.push(kw);
                     }
                   }
                 }
